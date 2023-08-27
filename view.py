@@ -1,5 +1,5 @@
 import text
-from model import Contact, PhoneBook
+from model import PhoneBook
 
 def main_menu():
     for i, item in enumerate(text.menu):
@@ -21,12 +21,12 @@ def print_message(msg: str):
 
 def show_book(book: PhoneBook, msg: str):
     if book:
-        print('\n' + '*' * 67)
+        print('\n' + '*' * (book.max_len("name") + book.max_len("phone") + book.max_len("comment") + 8))
         for i, contact in book.phone_book.items():
             print(f'{i:>3}. {contact.name:<{book.max_len("name")}}'
                 f'{contact.phone:<{book.max_len("phone")}}'
                 f'{contact.comment:<{book.max_len("comment")}}')
-        print('*'* 67 + '\n')
+        print('*' * (book.max_len("name") + book.max_len("phone") + book.max_len("comment") + 8) + '\n')
     else:
         print_message(msg)
 

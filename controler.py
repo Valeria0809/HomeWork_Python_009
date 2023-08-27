@@ -22,9 +22,9 @@ def start():
                 pb.save_file()
                 view.print_message(text.save_successful)
             case 3:
-                view.show_book(pb.phone_book, text.empty_book_error)
+                view.show_book(pb, text.empty_book_error)
             case 4:
-                new_contact = view.input_contact(text.input_contact)
+                new_contact = view.input_contact(text.input_contact())
                 pb.add_contact(new_contact)
                 view.print_message(text.new_contact(new_contact[0], text.operation[0]))
             case 5:
@@ -32,7 +32,7 @@ def start():
             case 6:
                 if search_contact(pb):
                     c_id = int(view.input_request(text.input_edit_contact_id))
-                    new_contact = view.input_contact(text.input_edit_contact)
+                    new_contact = view.input_contact(text.input_contact(True))
                     name = pb.edit_contact(c_id, new_contact)
                     view.print_message(text.contact_action(name, text.operation[1]))
             case 7:

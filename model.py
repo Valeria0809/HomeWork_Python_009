@@ -6,11 +6,17 @@ class Contact:
         self.name = name
         self.phone = phone
         self.comment = comment
+        
+    def full(self):
+        return f'{self.name} {self.phone} {self.comment}'
 
 class PhoneBook:
-    def __init__(self, path: str = 'phone.txt'):
+    def __init__(self, phone_book: dict = None, path: str = 'phone.txt'):
         self.path = path
-        self.phone_book: dict[int, Contact] = {}
+        if phone_book is None:
+            self.phone_book: dict[int, Contact] = {}
+        else:
+            self.phone_book = phone_book
         self.original_book = {}
 
     def open_file(self):
@@ -34,14 +40,13 @@ class PhoneBook:
         c_id = max(self.phone_book) + 1
         self.phone_book[c_id] = new_contact
         
-    def find_contact(self, word: str) -> dict[int,list[str]]:
+    def find_contact(self, word: str):
         result = {}
         for c_id, contact in self.phone_book.items():
-            for field in contact:
-                if word.lower() in field.lower():
-                    result[c_id] = contact
-                    break
-        return result
+            if word.lower() in contact.full():
+                result[c_id] = contact
+                break
+        return PhoneBook(result)
 
     def edit_contact(self, c_id: int, new_contact: list[str]):
         current_contact = self.phone_book.get(c_id)
@@ -51,7 +56,7 @@ class PhoneBook:
                 contact.append(new_contact[i])
         else:
             contact.append(current_contact[i])
-            self.phone_book[c_id] = contact
+            self.phone_book[c_id] = Contact(*contact)
         return contact[0]
 
     def delet_contact(self, c_id: int) -> str:
@@ -67,4 +72,4 @@ class PhoneBook:
             else:
                 item = contact.comment
             result.append(item)
-            return len(max(result, key=len))
+        return len(max(result, key=len))
