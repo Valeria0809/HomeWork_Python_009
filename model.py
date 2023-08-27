@@ -1,17 +1,24 @@
 from copy import deepcopy
 
+
+class Contact:
+    def __init__(self, name: str, phone: str, comment: str):
+        self.name = name
+        self.phone = phone
+        self.comment = comment
+
 class PhoneBook:
     def __init__(self, path: str = 'phone.txt'):
         self.path = path
-        self.phone_book = {}
+        self.phone_book: dict[int, Contact] = {}
         self.original_book = {}
 
     def open_file(self):
         with open(self.path, 'r', encoding='UTF-8') as file:
             data = file.readlines()
         for i, contact in enumerate(data, 1):
-            contact  = contact.split(';')
-            self.phone_book[i] = contact
+            contact  = contact.strip().split(';')
+            self.phone_book[i] = Contact(*contact)
         self.original_book = deepcopy(self.phone_book)
 
     def save_file(self):
@@ -49,3 +56,15 @@ class PhoneBook:
 
     def delet_contact(self, c_id: int) -> str:
         return self.phone_book.pop(c_id)[0]
+    
+    def max_len(self, option: str) -> int:
+        result = []
+        for contact in self.phone_book.values:
+            if option == 'name':
+                item = contact.name
+            elif option == 'phone':
+                item = contact.phone
+            else:
+                item = contact.comment
+            result.append(item)
+            return len(max(result, key=len))
